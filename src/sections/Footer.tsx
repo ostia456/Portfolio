@@ -17,7 +17,7 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
+    { icon: Github, href: 'https://github.com/ostia456', label: 'GitHub' },
     { icon: Linkedin, href: 'https://www.linkedin.com/in/ostia-dedo/', label: 'LinkedIn' },
     { icon: Mail, href: 'mailto:ostiadedo456@gmail.com', label: 'Email' },
   ];
