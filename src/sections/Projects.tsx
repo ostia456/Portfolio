@@ -23,7 +23,7 @@ const projects: Project[] = [
     technologies: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'Data Preprocessing'],
     results: 'Score de précision: 0.99',
     icon: TrendingUp,
-    githubUrl: 'https://github.com',
+    githubUrl: 'https://github.com/ostia456',
     demoUrl: '#',
   },
   {
@@ -35,7 +35,7 @@ const projects: Project[] = [
     technologies: ['Python', 'OpenCV', 'YOLO', 'TensorFlow', 'Roboflow', 'Q-Learning'],
     results: 'Jeu en temps réel, aucun coup préprogrammé',
     icon: Cpu,
-    githubUrl: 'https://github.com',
+    githubUrl: 'https://github.com/ostia456',
     demoUrl: '#',
   },
   {
@@ -47,7 +47,7 @@ const projects: Project[] = [
     technologies: ['MicroPython', 'IoT', 'Capteurs', 'Machine Learning', 'Embedded Systems'],
     results: 'Navigation autonome réussie avec évitement d\'obstacles',
     icon: Car,
-    githubUrl: 'https://github.com',
+    githubUrl: 'https://github.com/ostia456',
     demoUrl: '#',
   },
 ];
