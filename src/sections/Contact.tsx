@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Send, 
-  Linkedin, 
-  Github, 
-  Twitter,
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  Linkedin,
+  Github,
   CheckCircle,
-  Loader2
+  Loader2,
+  AlertCircle,
 } from 'lucide-react';
 
 const Contact = () => {
@@ -20,6 +20,7 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -33,27 +34,51 @@ const Contact = () => {
       },
       { threshold: 0.2, rootMargin: '0px 0px -50px 0px' }
     );
-
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-
     return () => observer.disconnect();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError(null);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const form = e.target as HTMLFormElement;
+      const data = new FormData(form);
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', message: '' });
+      // Ajoute la clé Web3Forms
+      data.append('access_key', 'e48011f5-609b-4055-b5d1-e310072379f0');
 
-    // Reset success message after 5 seconds
-    setTimeout(() => setIsSubmitted(false), 5000);
+      // Champs optionnels recommandés
+      data.append('subject', 'Nouveau message depuis ton portfolio');
+      data.append('from_email', formData.email); // Pour répondre directement depuis Gmail
+      data.append('botcheck', ''); // Honeypot anti-spam
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: data,
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const json = await response.json();
+
+      if (json.success) {
+        setIsSubmitted(true);
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setIsSubmitted(false), 6000);
+      } else {
+        setSubmitError(json.message || 'Erreur lors de l’envoi. Réessaie.');
+      }
+    } catch (err) {
+      setSubmitError('Problème de connexion. Vérifie ta connexion internet.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -86,8 +111,7 @@ const Contact = () => {
 
   const socialLinks = [
     { icon: Linkedin, href: 'https://www.linkedin.com/in/ostia-dedo/', label: 'LinkedIn' },
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+    { icon: Github, href: 'https://github.com/ostia456', label: 'GitHub' },
   ];
 
   return (
@@ -139,19 +163,15 @@ const Contact = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Info */}
+          {/* Contact Info (inchangé) */}
           <div
             className={`transition-all duration-700 ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
             }`}
           >
-            <h3
-              className="text-2xl font-bold mb-8"
-              style={{ color: '#ffffff', fontFamily: 'Montserrat, sans-serif' }}
-            >
+            <h3 className="text-2xl font-bold mb-8" style={{ color: '#ffffff', fontFamily: 'Montserrat, sans-serif' }}>
               Informations de Contact
             </h3>
-
             <div className="space-y-6 mb-12">
               {contactInfo.map((info, index) => (
                 <a
@@ -192,12 +212,8 @@ const Contact = () => {
               ))}
             </div>
 
-            {/* Social Links */}
             <div>
-              <h4
-                className="text-lg font-bold mb-4"
-                style={{ color: '#ffffff', fontFamily: 'Montserrat, sans-serif' }}
-              >
+              <h4 className="text-lg font-bold mb-4" style={{ color: '#ffffff', fontFamily: 'Montserrat, sans-serif' }}>
                 Réseaux Sociaux
               </h4>
               <div className="flex gap-4">
@@ -247,18 +263,12 @@ const Contact = () => {
                 border: '1px solid rgba(255, 255, 255, 0.1)',
               }}
             >
-              <h3
-                className="text-2xl font-bold mb-6"
-                style={{ color: '#ffffff', fontFamily: 'Montserrat, sans-serif' }}
-              >
+              <h3 className="text-2xl font-bold mb-6" style={{ color: '#ffffff', fontFamily: 'Montserrat, sans-serif' }}>
                 Envoyez-moi un message
               </h3>
 
               {isSubmitted ? (
-                <div
-                  className="p-6 rounded-xl text-center"
-                  style={{ background: 'rgba(46, 125, 50, 0.2)' }}
-                >
+                <div className="p-6 rounded-xl text-center" style={{ background: 'rgba(46, 125, 50, 0.2)' }}>
                   <CheckCircle size={48} style={{ color: '#4caf50' }} className="mx-auto mb-4" />
                   <h4 className="text-xl font-bold mb-2" style={{ color: '#4caf50' }}>
                     Message envoyé !
@@ -269,6 +279,13 @@ const Contact = () => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Honeypot anti-spam */}
+                  <input type="checkbox" name="botcheck" style={{ display: 'none' }} tabIndex={-1} />
+
+                  {/* Champs cachés utiles */}
+                  <input type="hidden" name="subject" value="Nouveau message depuis ton portfolio" />
+                  <input type="hidden" name="from_email" value={formData.email} />
+
                   <div>
                     <label
                       htmlFor="name"
@@ -376,6 +393,13 @@ const Contact = () => {
                       />
                     </div>
                   </div>
+
+                  {submitError && (
+                    <div className="p-4 rounded-xl bg-red-900/30 text-red-300 flex items-center gap-3">
+                      <AlertCircle size={20} />
+                      <p>{submitError}</p>
+                    </div>
+                  )}
 
                   <button
                     type="submit"
