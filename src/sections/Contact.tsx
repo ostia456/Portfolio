@@ -40,37 +40,42 @@ const Contact = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(null);
 
-    // Formatage du message (tu peux personnaliser le texte)
-    const whatsappMessage = 
-      `*Nouveau message depuis le portfolio !* 🌟\n\n` +
-      `Nom: ${formData.name || 'Non renseigné'}\n` +
-      `Email: ${formData.email || 'Non renseigné'}\n` +
-      `Message:\n${formData.message || 'Aucun message'}\n\n` +
-      `Envoyé le ${new Date().toLocaleString('fr-BJ')}`;
-
-    // Numéro WhatsApp (international, sans espaces ni tirets)
-    const phoneNumber = '2290141120115';
-
-    // Lien wa.me officiel
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
     try {
-      // Ouvre le lien (mobile → WhatsApp app, desktop → web.whatsapp.com)
-      window.open(whatsappUrl, '_blank');
-      
-      // Simule succès après ouverture
-      setTimeout(() => {
+      const form = e.target as HTMLFormElement;
+      const data = new FormData(form);
+
+      // Ajoute la clé Web3Forms
+      data.append('access_key', 'e48011f5-609b-4055-b5d1-e310072379f0');
+
+      // Champs optionnels recommandés
+      data.append('subject', 'Nouveau message depuis ton portfolio');
+      data.append('from_email', formData.email); // Pour répondre directement depuis Gmail
+      data.append('botcheck', ''); // Honeypot anti-spam
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: data,
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      const json = await response.json();
+
+      if (json.success) {
         setIsSubmitted(true);
         setFormData({ name: '', email: '', message: '' });
         setTimeout(() => setIsSubmitted(false), 6000);
-      }, 800);
+      } else {
+        setSubmitError(json.message || 'Erreur lors de l’envoi. Réessaie.');
+      }
     } catch (err) {
-      setSubmitError('Impossible d’ouvrir WhatsApp. Copie le message manuellement ou vérifie ton navigateur.');
+      setSubmitError('Problème de connexion. Vérifie ta connexion internet.');
     } finally {
       setIsSubmitting(false);
     }
@@ -118,7 +123,7 @@ const Contact = () => {
         background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
       }}
     >
-      {/* Animated background (inchangé) */}
+      {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(15)].map((_, i) => (
           <div
@@ -138,7 +143,7 @@ const Contact = () => {
       </div>
 
       <div className="container mx-auto relative z-10">
-        {/* Header (inchangé) */}
+        {/* Section Header */}
         <div className="text-center mb-16">
           <span
             className="inline-block px-4 py-2 rounded-full text-sm font-medium mb-4"
@@ -158,7 +163,7 @@ const Contact = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Infos contact (inchangé) */}
+          {/* Contact Info (inchangé) */}
           <div
             className={`transition-all duration-700 ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
@@ -243,7 +248,7 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Formulaire */}
+          {/* Contact Form */}
           <div
             className={`transition-all duration-700 ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
@@ -266,16 +271,27 @@ const Contact = () => {
                 <div className="p-6 rounded-xl text-center" style={{ background: 'rgba(46, 125, 50, 0.2)' }}>
                   <CheckCircle size={48} style={{ color: '#4caf50' }} className="mx-auto mb-4" />
                   <h4 className="text-xl font-bold mb-2" style={{ color: '#4caf50' }}>
-                    Message prêt !
+                    Message envoyé !
                   </h4>
                   <p style={{ color: '#b0b0b0' }}>
-                    Ouvre WhatsApp et envoie-le-moi (il est déjà pré-rempli) 🚀
+                    Je vous répondrai dans les plus brefs délais.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Honeypot anti-spam */}
+                  <input type="checkbox" name="botcheck" style={{ display: 'none' }} tabIndex={-1} />
+
+                  {/* Champs cachés utiles */}
+                  <input type="hidden" name="subject" value="Nouveau message depuis ton portfolio" />
+                  <input type="hidden" name="from_email" value={formData.email} />
+
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2" style={{ color: '#b0b0b0' }}>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: '#b0b0b0' }}
+                    >
                       Nom
                     </label>
                     <div className="relative">
@@ -307,7 +323,11 @@ const Contact = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#b0b0b0' }}>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: '#b0b0b0' }}
+                    >
                       Email
                     </label>
                     <div className="relative">
@@ -339,7 +359,11 @@ const Contact = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-2" style={{ color: '#b0b0b0' }}>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: '#b0b0b0' }}
+                    >
                       Message
                     </label>
                     <div className="relative">
@@ -399,12 +423,12 @@ const Contact = () => {
                     {isSubmitting ? (
                       <>
                         <Loader2 size={20} className="animate-spin" />
-                        Préparation...
+                        Envoi en cours...
                       </>
                     ) : (
                       <>
                         <Send size={20} />
-                        Envoyer sur WhatsApp
+                        Envoyer le message
                       </>
                     )}
                   </button>
