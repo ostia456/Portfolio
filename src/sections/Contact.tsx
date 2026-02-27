@@ -41,7 +41,7 @@ const Contact = () => {
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault();          // ← Au tout début, essentiel
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -49,13 +49,10 @@ const Contact = () => {
       const form = e.target as HTMLFormElement;
       const data = new FormData(form);
 
-      // Ajoute la clé Web3Forms
       data.append('access_key', 'e48011f5-609b-4055-b5d1-e310072379f0');
-
-      // Champs optionnels recommandés
       data.append('subject', 'Nouveau message depuis ton portfolio');
-      data.append('from_email', formData.email); // Pour répondre directement depuis Gmail
-      data.append('botcheck', ''); // Honeypot anti-spam
+      data.append('from_email', formData.email);
+      data.append('botcheck', '');
 
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -70,12 +67,14 @@ const Contact = () => {
       if (json.success) {
         setIsSubmitted(true);
         setFormData({ name: '', email: '', message: '' });
-        setTimeout(() => setIsSubmitted(false), 6000);
+        setTimeout(() => setIsSubmitted(false), 8000); // 8 secondes pour bien voir le message
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll vers le haut (optionnel)
       } else {
         setSubmitError(json.message || 'Erreur lors de l’envoi. Réessaie.');
       }
     } catch (err) {
       setSubmitError('Problème de connexion. Vérifie ta connexion internet.');
+      console.error('Fetch error:', err); // Pour debugger dans la console F12
     } finally {
       setIsSubmitting(false);
     }
@@ -163,7 +162,7 @@ const Contact = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Info (inchangé) */}
+          {/* Contact Info */}
           <div
             className={`transition-all duration-700 ${
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
@@ -287,11 +286,7 @@ const Contact = () => {
                   <input type="hidden" name="from_email" value={formData.email} />
 
                   <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium mb-2"
-                      style={{ color: '#b0b0b0' }}
-                    >
+                    <label htmlFor="name" className="block text-sm font-medium mb-2" style={{ color: '#b0b0b0' }}>
                       Nom
                     </label>
                     <div className="relative">
@@ -323,11 +318,7 @@ const Contact = () => {
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium mb-2"
-                      style={{ color: '#b0b0b0' }}
-                    >
+                    <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#b0b0b0' }}>
                       Email
                     </label>
                     <div className="relative">
@@ -359,11 +350,7 @@ const Contact = () => {
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-medium mb-2"
-                      style={{ color: '#b0b0b0' }}
-                    >
+                    <label htmlFor="message" className="block text-sm font-medium mb-2" style={{ color: '#b0b0b0' }}>
                       Message
                     </label>
                     <div className="relative">
