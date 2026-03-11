@@ -51,6 +51,18 @@ const skillCategories: SkillCategory[] = [
       { name: 'Reinforcement Learning', level: 80 },
     ],
   },
+    {
+    title: 'Collecte de données',
+    icon: Brain,
+    skills: [
+      { name: 'Pandas', level: 96 },
+      { name: 'BeautifulSoup', level: 85 },
+      { name: 'Sellelium', level: 80 },
+      { name: 'Apify', level: 90 },
+      { name: 'Web scaper', level: 85 },
+      { name: 'Requests ', level: 80 },
+    ],
+  },
   {
     title: 'Analyse de Données',
     icon: BarChart3,
