@@ -55,7 +55,7 @@ const experiences: TimelineItem[] = [
       'Programmation Python avancée & Machine learning & Web Scraping ',
     ],
     skills: ['MicroPython', 'IoT', 'Capteurs', 'POO', 'RegEx', 'Data Science','outils de scraping'],
-    results: 'Conception d\'une voiture autonome avec évitement d\'obstacle, système de gestion de bibliothèque',
+    results: 'Conception d\'une voiture autonome avec évitement d\'obstacle, système de gestion de bibliothèque , collecte de données',
     side: 'left',
   },
 ];
