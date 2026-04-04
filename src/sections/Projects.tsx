@@ -31,7 +31,7 @@ const projects: Project[] = [
     title: 'Bras Robotique Intelligent - Jeu de Morpion',
     description:
       'Système combinant vision par ordinateur et apprentissage renforcé. Le bras robotique utilise le Q-Learning et l\'équation de Bellman pour apprendre à jouer au morpion en temps réel contre un humain.',
-    image: '/images/robot.jpeg',
+    image: '/images/project-robot.jpg',
     technologies: ['Python', 'OpenCV', 'YOLO', 'TensorFlow', 'Roboflow', 'Q-Learning'],
     results: 'Jeu en temps réel, aucun coup préprogrammé',
     icon: Cpu,
