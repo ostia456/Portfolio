@@ -133,7 +133,7 @@ const Hero = () => {
               }`}
               style={{
                 transitionDelay: '0.8s',
-                color: '#999999',
+                color: '#999999b3',
               }}
             >
               Je transforme les données complexes en solutions intelligentes. Expert en Python, 
