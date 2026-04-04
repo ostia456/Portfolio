@@ -138,6 +138,7 @@ const Hero = () => {
             >
               Je transforme les données complexes en solutions intelligentes. Expert en Python, 
               Machine Learning et IoT, je mets mon expertise technique au service de projets innovants.
+              Passionné par l'intelligence artificielle appliquée à l'imagerie médicale, développeur Python & MicroPython, chercheur en devenir.
             </p>
 
             <div

@@ -35,7 +35,7 @@ const projects: Project[] = [
     technologies: ['Python', 'OpenCV', 'YOLO', 'TensorFlow', 'Roboflow', 'Q-Learning'],
     results: 'Jeu en temps réel, aucun coup préprogrammé',
     icon: Cpu,
-    githubUrl: 'https://github.com/ostia456',
+    githubUrl: 'https://github.com/Sun2301/TicTacToeRL-RobotArm/tree/main',
     demoUrl: '#',
   },
   {
@@ -47,7 +47,7 @@ const projects: Project[] = [
     technologies: ['MicroPython', 'IoT', 'Capteurs', 'Machine Learning', 'Embedded Systems'],
     results: 'Navigation autonome réussie avec évitement d\'obstacles',
     icon: Car,
-    githubUrl: 'https://github.com/ostia456',
+    githubUrl: '#',
     demoUrl: '#',
   },
 ];
