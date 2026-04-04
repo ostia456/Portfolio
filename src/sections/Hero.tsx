@@ -133,12 +133,11 @@ const Hero = () => {
               }`}
               style={{
                 transitionDelay: '0.8s',
-                color: '#999999b3',
+                color: '#999999',
               }}
             >
-              Je transforme les données complexes en solutions intelligentes. Expert en Python, 
-              Machine Learning et IoT, je mets mon expertise technique au service de projets innovants.
-              Développeur Python & MicroPython, chercheur en devenir.
+              Développeur Python & MicroPython en progression, je construis des projets alliant données, machine learning et objets connectés. 
+              Passionné par l'apprentissage continu et la recherche appliquée.
             </p>
 
             <div
