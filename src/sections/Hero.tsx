@@ -133,7 +133,7 @@ const Hero = () => {
               }`}
               style={{
                 transitionDelay: '0.8s',
-                color: '#999999',
+                color: '#666666',
               }}
             >
               Développeur Python & MicroPython en progression, je construis des projets alliant données, machine learning et objets connectés. 
